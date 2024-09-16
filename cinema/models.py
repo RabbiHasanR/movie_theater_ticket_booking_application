@@ -36,15 +36,11 @@ class Movie(models.Model):
         return f"{self.title} at {self.show_time}"
     
     def clean(self):
-        """
-        Ensure no two movies are shown in the same room at the same time.
-        """
         overlapping_movies = Movie.objects.filter(room=self.room, show_time=self.show_time).exclude(id=self.id)
         if overlapping_movies.exists():
             raise ValidationError(f"A movie is already scheduled in {self.room.name} at {self.show_time}.")
 
     def save(self, *args, **kwargs):
-        # Ensure validation logic runs before saving the movie
         self.clean()
         super().save(*args, **kwargs)
 
