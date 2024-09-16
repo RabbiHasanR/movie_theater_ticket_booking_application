@@ -59,3 +59,11 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Booking for {self.movie.title} - Seat {self.seat.row}-{self.seat.column}"
+    
+    
+    class Meta:
+        unique_together = ('movie', 'seat')
+
+    def clean(self):
+        if self.seat.room != self.movie.room:
+            raise ValidationError("The selected seat does not belong to the room where the movie is being shown.")
