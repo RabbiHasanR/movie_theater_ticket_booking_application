@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 class Room(models.Model):
     name = models.CharField(max_length=100)
@@ -7,6 +8,23 @@ class Room(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.update_seats()
+
+    def update_seats(self):
+        existing_seats = Seat.objects.filter(room=self)
+
+        for row in range(1, self.rows + 1):
+            for column in range(1, self.columns + 1):
+                if not existing_seats.filter(row=row, column=column).exists():
+                    Seat.objects.create(room=self, row=row, column=column)
+
+        for seat in existing_seats:
+            if seat.row > self.rows or seat.column > self.columns:
+                seat.delete()
+
 
 class Movie(models.Model):
     title = models.CharField(max_length=200)
@@ -16,6 +34,19 @@ class Movie(models.Model):
 
     def __str__(self):
         return f"{self.title} at {self.show_time}"
+    
+    def clean(self):
+        """
+        Ensure no two movies are shown in the same room at the same time.
+        """
+        overlapping_movies = Movie.objects.filter(room=self.room, show_time=self.show_time).exclude(id=self.id)
+        if overlapping_movies.exists():
+            raise ValidationError(f"A movie is already scheduled in {self.room.name} at {self.show_time}.")
+
+    def save(self, *args, **kwargs):
+        # Ensure validation logic runs before saving the movie
+        self.clean()
+        super().save(*args, **kwargs)
 
 class Seat(models.Model):
     row = models.IntegerField()
