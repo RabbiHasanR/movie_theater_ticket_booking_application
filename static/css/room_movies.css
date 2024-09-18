@@ -1,0 +1,26 @@
+/* Styles specific to the room_movies page */
+.movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.movie-item {
+    margin: 15px;
+    text-align: center;
+}
+
+.movie-item img {
+    width: 150px;
+    height: 225px;
+    object-fit: cover;
+}
+
+.movie-item h3 {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.movie-item p {
+    color: gray;
+}

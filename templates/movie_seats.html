@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
+{% load static %} <!-- Ensure you load static files -->
 
 {% block title %}Seats for {{ movie.title }}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/movie_seats.css' %}">
+{% endblock %}
 
 {% block content %}
     <h1>Seats for {{ movie.title }} in {{ movie.room.name }}</h1>
@@ -11,7 +16,7 @@
                 <div class="seat booked">{{ seat.row }}-{{ seat.column }}</div>
             {% else %}
                 <a href="{% url 'book_seat' movie.id seat.id %}">
-                    <div class="seat">{{ seat.row }}-{{ seat.column }}</div>
+                    <div class="seat available">{{ seat.row }}-{{ seat.column }}</div>
                 </a>
             {% endif %}
         {% endfor %}

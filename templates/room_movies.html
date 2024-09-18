@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
+{% load static %} <!-- Load the static tag here -->
 
 {% block title %}Movies in {{ room.name }}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/room_movies.css' %}">
+{% endblock %}
 
 {% block content %}
     <h1>Movies in {{ room.name }}</h1>
@@ -9,7 +14,7 @@
             <div class="movie-item">
                 <a href="{% url 'movie_seats' movie.id %}">
                     {% if movie.poster %}
-                        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster" style="width:150px;height:225px;">
+                        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster">
                     {% else %}
                         <img src="https://via.placeholder.com/150x225.png?text=No+Poster" alt="No poster available">
                     {% endif %}
