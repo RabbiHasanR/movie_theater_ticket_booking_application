@@ -1,3 +1,4 @@
+import itertools
 from django.db import models
 from datetime import timedelta
 from django.core.exceptions import ValidationError
@@ -17,14 +18,19 @@ class Room(models.Model):
     def update_seats(self):
         existing_seats = Seat.objects.filter(room=self)
 
-        for row in range(1, self.rows + 1):
-            for column in range(1, self.columns + 1):
-                if not existing_seats.filter(row=row, column=column).exists():
-                    Seat.objects.create(room=self, row=row, column=column)
+        existing_seat_positions = set((seat.row, seat.column) for seat in existing_seats)
 
-        for seat in existing_seats:
-            if seat.row > self.rows or seat.column > self.columns:
-                seat.delete()
+        all_possible_seat_positions = set(itertools.product(range(1, self.rows + 1), range(1, self.columns + 1)))
+
+        seats_to_create = all_possible_seat_positions - existing_seat_positions
+        
+        new_seats = [Seat(room=self, row=row, column=column) for row, column in seats_to_create]
+
+        Seat.objects.bulk_create(new_seats)
+
+        seats_to_delete = existing_seats.filter(row__gt=self.rows) | existing_seats.filter(column__gt=self.columns)
+
+        seats_to_delete.delete()
 
 
 class Movie(models.Model):
