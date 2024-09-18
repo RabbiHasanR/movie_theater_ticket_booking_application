@@ -1,4 +1,4 @@
-from django.db.models import OuterRef, Subquery, Exists
+from django.db.models import OuterRef, Exists
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Room, Movie, Seat, Booking
 

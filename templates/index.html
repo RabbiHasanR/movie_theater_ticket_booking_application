@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %} <!-- Load static files -->
+{% load static %}
 
 {% block title %}Cinema Application - Available Rooms{% endblock %}
 
@@ -14,10 +14,8 @@
         {% for room in rooms %}
             <div class="room-card">
                 <a href="{% url 'room_movies' room.id %}">
-                    <!-- Placeholder image for the room -->
                     <img src="https://via.placeholder.com/200x150.png?text=Room+{{ room.name }}" alt="{{ room.name }} image">
                     
-                    <!-- Room title -->
                     <h3>{{ room.name }}</h3>
                 </a>
             </div>
