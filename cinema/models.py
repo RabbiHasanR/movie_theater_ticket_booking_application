@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import timedelta
 from django.core.exceptions import ValidationError
 
 class Room(models.Model):
@@ -30,15 +31,30 @@ class Movie(models.Model):
     title = models.CharField(max_length=200)
     poster = models.ImageField(upload_to='posters/')
     show_time = models.DateTimeField()
+    movie_length = models.IntegerField(help_text="Movie length in minutes")
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='movies')
 
     def __str__(self):
         return f"{self.title} at {self.show_time}"
-    
+
     def clean(self):
-        overlapping_movies = Movie.objects.filter(room=self.room, show_time=self.show_time).exclude(id=self.id)
+        # Calculate this movie's end time (show time + movie length + 30 minutes buffer)
+        new_movie_end_time = self.show_time + timedelta(minutes=self.movie_length + 30)
+
+        overlapping_movies = Movie.objects.filter(
+            room=self.room, 
+            show_time__lt=new_movie_end_time,
+            show_time__gt=self.show_time - timedelta(minutes=30),
+        ).exclude(id=self.id)
+
         if overlapping_movies.exists():
-            raise ValidationError(f"A movie is already scheduled in {self.room.name} at {self.show_time}.")
+            overlapping_movie = overlapping_movies.first()
+            raise ValidationError(
+                f"Movie '{overlapping_movie.title}' is already scheduled in {self.room.name} "
+                f"from {overlapping_movie.show_time} to "
+                f"{(overlapping_movie.show_time + timedelta(minutes=overlapping_movie.movie_length + 30))}. "
+                f"Please choose a different time."
+            )
 
     def save(self, *args, **kwargs):
         self.clean()
