@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies in {{ room.name }}</title>
+</head>
+<body>
+    <h1>Movies in {{ room.name }}</h1>
+    <ul>
+        {% for movie in movies %}
+            <li>{{ movie.title }} - {{ movie.show_time }}</li>
+        {% empty %}
+            <li>No movies available in this room</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'index' %}">Back to rooms list</a>
+</body>
+</html>
