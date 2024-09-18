@@ -1,4 +1,3 @@
-/* Styles for movie_seats page */
 .seat-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, 50px);
