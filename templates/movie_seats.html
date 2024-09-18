@@ -16,11 +16,11 @@
             text-align: center;
             line-height: 50px;
             cursor: pointer;
-            background-color: green; /* Available seat */
+            background-color: green;
             color: white;
         }
         .seat.booked {
-            background-color: red; /* Booked seat */
+            background-color: red;
             cursor: not-allowed;
         }
         .seat:hover:not(.booked) {
@@ -43,6 +43,6 @@
         {% endfor %}
     </div>
 
-    <a href="{% url 'index' %}">Back to rooms list</a>
+    <a href="{% url 'room_movies' movie.room.id %}">Back to movie list in {{ movie.room.name }}</a>
 </body>
 </html>

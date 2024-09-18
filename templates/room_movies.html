@@ -18,6 +18,10 @@
             height: 225px;
             object-fit: cover;
         }
+        .movie-item a {
+            text-decoration: none;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -25,13 +29,15 @@
     <div class="movie-list">
         {% for movie in movies %}
             <div class="movie-item">
-                {% if movie.poster %}
-                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster">
-                {% else %}
-                    <img src="https://via.placeholder.com/150x225.png?text=No+Poster" alt="No poster available">
-                {% endif %}
-                <h3>{{ movie.title }}</h3>
-                <p>Showtime: {{ movie.show_time }}</p>
+                <a href="{% url 'movie_seats' movie.id %}">
+                    {% if movie.poster %}
+                        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster">
+                    {% else %}
+                        <img src="https://via.placeholder.com/150x225.png?text=No+Poster" alt="No poster available">
+                    {% endif %}
+                    <h3>{{ movie.title }}</h3>
+                    <p>Showtime: {{ movie.show_time }}</p>
+                </a>
             </div>
         {% empty %}
             <p>No movies available in this room</p>
