@@ -16,11 +16,11 @@
             text-align: center;
             line-height: 50px;
             cursor: pointer;
-            background-color: green;
+            background-color: green; /* Available seat */
             color: white;
         }
         .seat.booked {
-            background-color: red;
+            background-color: red; /* Booked seat */
             cursor: not-allowed;
         }
         .seat:hover:not(.booked) {
@@ -34,10 +34,10 @@
     <div class="seat-grid">
         {% for seat in seats %}
             {% if seat.is_booked %}
-                <div class="seat booked">{{ seat.seat.row }}-{{ seat.seat.column }}</div>
+                <div class="seat booked">{{ seat.row }}-{{ seat.column }}</div>
             {% else %}
-                <a href="{% url 'book_seat' movie.id seat.seat.id %}">
-                    <div class="seat">{{ seat.seat.row }}-{{ seat.seat.column }}</div>
+                <a href="{% url 'book_seat' movie.id seat.id %}">
+                    <div class="seat">{{ seat.row }}-{{ seat.column }}</div>
                 </a>
             {% endif %}
         {% endfor %}

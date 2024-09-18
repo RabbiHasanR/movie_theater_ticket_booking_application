@@ -1,3 +1,4 @@
+from django.db.models import OuterRef, Subquery, Exists
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Room, Movie, Seat, Booking
 
@@ -20,19 +21,18 @@ def room_movies(request, room_id):
     return render(request, 'room_movies.html', context)
 
 def movie_seats(request, movie_id):
+    # Fetch the movie
     movie = get_object_or_404(Movie, id=movie_id)
-    seats = movie.room.seats.all()
-    seat_status = []
-    for seat in seats:
-        is_booked = Booking.objects.filter(movie=movie, seat=seat).exists()
-        seat_status.append({
-            'seat': seat,
-            'is_booked': is_booked
-        })
+    
+    # Subquery to check if the seat is booked for the specific movie
+    is_booked_subquery = Booking.objects.filter(movie=movie, seat_id=OuterRef('pk'))
+
+    # Fetch all seats and annotate them with booking status (True if booked, False if not)
+    seats = Seat.objects.filter(room=movie.room).annotate(is_booked=Exists(is_booked_subquery))
 
     context = {
         'movie': movie,
-        'seats': seat_status
+        'seats': seats
     }
     return render(request, 'movie_seats.html', context)
 
