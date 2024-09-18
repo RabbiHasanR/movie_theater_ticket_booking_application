@@ -1,37 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies in {{ room.name }}</title>
-    <style>
-        .movie-list {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .movie-item {
-            margin: 15px;
-            text-align: center;
-        }
-        .movie-item img {
-            width: 150px;
-            height: 225px;
-            object-fit: cover;
-        }
-        .movie-item a {
-            text-decoration: none;
-            color: black;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Movies in {{ room.name }}{% endblock %}
+
+{% block content %}
     <h1>Movies in {{ room.name }}</h1>
     <div class="movie-list">
         {% for movie in movies %}
             <div class="movie-item">
                 <a href="{% url 'movie_seats' movie.id %}">
                     {% if movie.poster %}
-                        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster">
+                        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster" style="width:150px;height:225px;">
                     {% else %}
                         <img src="https://via.placeholder.com/150x225.png?text=No+Poster" alt="No poster available">
                     {% endif %}
@@ -44,5 +22,4 @@
         {% endfor %}
     </div>
     <a href="{% url 'index' %}">Back to rooms list</a>
-</body>
-</html>
+{% endblock %}

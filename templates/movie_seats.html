@@ -1,34 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seats for {{ movie.title }} in {{ movie.room.name }}</title>
-    <style>
-        .seat-grid {
-            display: grid;
-            grid-template-columns: repeat({{ movie.room.columns }}, 50px);
-            gap: 5px;
-        }
-        .seat {
-            width: 50px;
-            height: 50px;
-            text-align: center;
-            line-height: 50px;
-            cursor: pointer;
-            background-color: green; /* Available seat */
-            color: white;
-        }
-        .seat.booked {
-            background-color: red; /* Booked seat */
-            cursor: not-allowed;
-        }
-        .seat:hover:not(.booked) {
-            background-color: lightgreen;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Seats for {{ movie.title }}{% endblock %}
+
+{% block content %}
     <h1>Seats for {{ movie.title }} in {{ movie.room.name }}</h1>
 
     <div class="seat-grid">
@@ -44,5 +18,4 @@
     </div>
 
     <a href="{% url 'room_movies' movie.room.id %}">Back to movie list in {{ movie.room.name }}</a>
-</body>
-</html>
+{% endblock %}
