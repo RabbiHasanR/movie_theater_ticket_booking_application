@@ -16,6 +16,11 @@ This is a Django-based cinema management application that allows users to manage
 - **Poster Management**: Each movie can have an associated poster image that is automatically deleted from the filesystem when the movie is deleted.
 - **Cascading Deletions**: When a room is deleted, all associated movies are deleted, and their posters are removed from the filesystem.
 
+## Demo Video
+
+[Click here to download and watch the demo video](./demo/demo-video.mp4)
+
+
 ## Installation
 
 To set up and run the cinema application, follow the steps below:
