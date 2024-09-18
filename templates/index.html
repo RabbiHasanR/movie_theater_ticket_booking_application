@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
+{% load static %} <!-- Load static files -->
 
 {% block title %}Cinema Application - Available Rooms{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/rooms.css' %}">
+{% endblock %}
+
 {% block content %}
     <h1>Available Rooms</h1>
-    <ul>
+
+    <div class="room-list">
         {% for room in rooms %}
-            <li>
-                <a href="{% url 'room_movies' room.id %}">{{ room.name }}</a>
-            </li>
+            <div class="room-card">
+                <a href="{% url 'room_movies' room.id %}">
+                    <!-- Placeholder image for the room -->
+                    <img src="https://via.placeholder.com/200x150.png?text=Room+{{ room.name }}" alt="{{ room.name }} image">
+                    
+                    <!-- Room title -->
+                    <h3>{{ room.name }}</h3>
+                </a>
+            </div>
         {% empty %}
-            <li>No rooms available</li>
+            <p>No rooms available</p>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
