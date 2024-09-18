@@ -4,16 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies in {{ room.name }}</title>
+    <style>
+        .movie-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .movie-item {
+            margin: 15px;
+            text-align: center;
+        }
+        .movie-item img {
+            width: 150px;
+            height: 225px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
     <h1>Movies in {{ room.name }}</h1>
-    <ul>
+    <div class="movie-list">
         {% for movie in movies %}
-            <li>{{ movie.title }} - {{ movie.show_time }}</li>
+            <div class="movie-item">
+                {% if movie.poster %}
+                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster">
+                {% else %}
+                    <img src="https://via.placeholder.com/150x225.png?text=No+Poster" alt="No poster available">
+                {% endif %}
+                <h3>{{ movie.title }}</h3>
+                <p>Showtime: {{ movie.show_time }}</p>
+            </div>
         {% empty %}
-            <li>No movies available in this room</li>
+            <p>No movies available in this room</p>
         {% endfor %}
-    </ul>
+    </div>
     <a href="{% url 'index' %}">Back to rooms list</a>
 </body>
 </html>

@@ -19,5 +19,7 @@ def room_movies(request, room_id):
     
     return render(request, 'room_movies.html', context)
 
+def movie_seats
+
 
 
